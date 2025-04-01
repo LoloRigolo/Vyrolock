@@ -33,7 +33,14 @@ def detect_suspicious_commands(filtered_packets):
                         "timestamp": timestamp
                     })
                     break  
-
+    suspicious_traffic = verif_attack(suspicious_traffic)               
     return suspicious_traffic
+
+def verif_attack(analysis: dict) -> dict:
+    if analysis == {}:
+        analysis['attack'] = 0
+    else:
+        analysis["attack"] = 1
+    return analysis
 
 
