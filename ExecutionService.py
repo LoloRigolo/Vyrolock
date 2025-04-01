@@ -1,6 +1,3 @@
-import json
-from scapy.all import IP, TCP, Raw
-
 SUSPICIOUS_PATTERNS = [
     b"cmd.exe", b"powershell", b"bash -i", b"nc -e", b"Invoke-Expression",
     b"wget ", b"curl ", b"python -c", b"perl -e", b"php -r", b"ssh -o"
