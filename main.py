@@ -31,6 +31,8 @@ filtered_packets = [extract_info(p) for p in packets if extract_info(p)]
 
 packets_json = json.dumps(filtered_packets, indent=4, default=str)
 
+result: dict = {}
+
 ips = []
 ips_analysis = {}
 initials_access_analysis = {}

@@ -8,4 +8,3 @@ def check_initial_acess(port: str, analysis: dict, ip: str) -> dict:
             initial_access_analysis = {"port": [port], "attempts": 1}
             analysis[ip] = initial_access_analysis
     return analysis
-        
