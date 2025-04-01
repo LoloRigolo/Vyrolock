@@ -1,4 +1,5 @@
 from IpAddressService import check_ip_address
+from ExecutionService import detect_suspicious_commands
 from InitialAcessService import check_initial_acess
 from PersistenceService import check_persistence
 from PrivilegeEscalationService import check_privilege_escalation
@@ -42,6 +43,9 @@ ips = []
 ips_analysis = {}
 initials_access_analysis = {}
 c2_persistence_analysis = {}
+suspicious_traffic = {}
+
+suspicious_traffic: dict = detect_suspicious_commands(filtered_packets)
 
 privilege_escalation_analysis: dict = check_privilege_escalation(filtered_packets)
 
@@ -67,6 +71,7 @@ result = {
     "ips_analysis": ips_analysis,
     "initials_access_analysis": initials_access_analysis,
     "c2_persistence_analysis": c2_persistence_analysis,
+    "suspicious_traffic": suspicious_traffic,
     "privilege_escalation_analysis": privilege_escalation_analysis
 }
 
