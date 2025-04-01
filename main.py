@@ -1,7 +1,10 @@
-from IpAddressService import check_ip_address
+from IpAddressService import check_sources
 from InitialAcessService import check_initial_acess
 from PersistenceService import check_persistence
 from PrivilegeEscalationService import check_privilege_escalation
+from DefenseEvasion import check_defense_evasion
+from DiscoveryService import check_discovery
+
 import json
 from scapy.all import rdpcap, IP, TCP, UDP, Raw
 from collections import defaultdict
@@ -44,6 +47,8 @@ initials_access_analysis = {}
 c2_persistence_analysis = {}
 
 privilege_escalation_analysis: dict = check_privilege_escalation(filtered_packets)
+defense_evasion_analysis: dict = check_defense_evasion(filtered_packets)
+discovery_analysis: dict = check_discovery(filtered_packets)
 
 for packet_data in filtered_packets:
     ip = packet_data["dst_ip"]
@@ -57,7 +62,7 @@ for packet_data in filtered_packets:
     #     ip_analysis = check_sources(ip)
     #     ips_analysis[ip] = ip_analysis
 
-    connections[(packet_data["src_ip"], ip, port)].append(timestamp)
+    connections[(packet_data["src_ip"], ip, port)].append(timestamp)    
 
 # Persistence Service
 for (src_ip, dst_ip, dport), timestamps in connections.items():
@@ -67,7 +72,9 @@ result = {
     "ips_analysis": ips_analysis,
     "initials_access_analysis": initials_access_analysis,
     "c2_persistence_analysis": c2_persistence_analysis,
-    "privilege_escalation_analysis": privilege_escalation_analysis
+    "privilege_escalation_analysis": privilege_escalation_analysis,
+    "defense_evasion_analysis": defense_evasion_analysis,
+    "discovery_analysis" : discovery_analysis
 }
 
 print(json.dumps(result, indent=4, default=str))
