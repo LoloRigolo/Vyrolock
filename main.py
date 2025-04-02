@@ -5,10 +5,15 @@ from PersistenceService import check_persistence
 from PrivilegeEscalationService import check_privilege_escalation
 from DiscoveryService import check_discovery
 from LateralMovementAcess import check_lateral_movement
+from map_generator import load_country_codes, extract_country_code, get_country_name,add_country_pins,save_map_with_js_style
+
 
 import json
 from scapy.all import rdpcap, IP, TCP, UDP, Raw
 from collections import defaultdict
+
+# Charger codes pays
+country_codes = load_country_codes()
 
 packets = rdpcap("ex4.pcap")
 
@@ -66,11 +71,21 @@ for packet_data in filtered_packets:
     #     ip_analysis = check_sources(ip)
     #     ips_analysis[ip] = ip_analysis
 
+    #Extract + affiche le pays
+    country_code = extract_country_code(packet_data["payload"], country_codes)
+    if country_code:
+        country_name = get_country_name(country_code, country_codes)
+        print(f"Ip : {ip}  Pays : {country_name} (Code ISO : {country_code})")
+
+
     connections[(packet_data["src_ip"], ip, port)].append(timestamp)    
 
 # Persistence Service
 for (src_ip, dst_ip, dport), timestamps in connections.items():
     c2_persistence_analysis = check_persistence(timestamps, c2_persistence_analysis, dst_ip, dport)
+
+add_country_pins(filtered_packets, country_codes)
+save_map_with_js_style()
 
 result = {
     "ips_analysis": ips_analysis,
