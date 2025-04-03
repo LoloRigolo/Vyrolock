@@ -1,3 +1,4 @@
+/* Style du header */
 header {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
@@ -10,6 +11,7 @@ header {
   height: 10vh;
 }
 
+/* Style de la section principale */
 section {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
@@ -18,22 +20,49 @@ section {
   display: flex;
   height: 80vh;
   border-radius: 10px;
+  justify-content: space-around;
+  align-items: flex-start;
 }
-.dashboard,
+
+/* Style pour les tableaux de bord (dashboard) */
+.dashboard {
+  background: white;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  height: 35vh;
+  margin: 10px;
+  border-radius: 10px;
+  flex: 1; /* Permet aux éléments d'occuper l'espace disponible */
+  min-width: 250px;
+}
 .map {
   background: white;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
-  height: 30vh;
+  height: 70vh;
   margin: 10px;
   border-radius: 10px;
+  flex: 1; /* Permet aux éléments d'occuper l'espace disponible */
+  min-width: 250px;
 }
-
+/* Style des titres */
 h2 {
   margin-bottom: 20px;
+  font-size: 1.5rem;
 }
+
+/* Style des informations générales (IP, MAC, etc.) */
 .info {
   margin: 10px 0;
   font-weight: bold;
+  font-size: 1.1rem;
+}
+
+#map {
+  height: 3vh;
+  width: 100%;
+  min-height: 400px; /* Ajustable selon ton besoin */
+  border: 1px solid #ddd;
 }

@@ -5,12 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard</title>
     <link rel="stylesheet" href="./style.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ping.js/0.1.4/ping.min.js"></script>
   </head>
   <header>
     <h1>VyroLock</h1>
   </header>
   <body>
     <section>
+      <!-- Dashboard Informations -->
       <div class="dashboard init_acces">
         <h2>Initial Access</h2>
         <p>
@@ -23,12 +30,15 @@
         <div id="user" class="info">Utilisateur: ...</div>
         <div id="flag" class="info">Flag: ...</div>
       </div>
+
+      <!-- Map interactive -->
       <div class="map">
-        <div>
-          <h2>Map interactive</h2>
-        </div>
+        <h2>Map interactive</h2>
+        <div id="map"></div>
+        <div id="ipInfo"></div>
       </div>
     </section>
+
     <script src="./script.js"></script>
   </body>
 </html>

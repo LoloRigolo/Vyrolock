@@ -5,6 +5,8 @@ from initial_acces_service import envoyer_donnees_pcap, extract_pcap_info
 from ip_private_connections import analyze_pcap_and_ip
 import json
 from loguru import logger
+from certificate_detection import pcap_to_json
+from countryCode import get_country_info
 
 app = Flask(__name__)
 CORS(app)
@@ -32,6 +34,16 @@ def get_info(ip_address):
     data = analyze_pcap_and_ip(file_path, ip_address)
     return jsonify(data)
 
+@app.route('/map', methods=['GET'])
+def map_service():
+    file_path: str = download_file()
+    response = pcap_to_json(file_path)
+    return jsonify(response)
+
+@app.route('/codeiso/<alpha2>', methods=['GET'])
+def iso_service(alpha2):
+    response = get_country_info(alpha2)
+    return jsonify(response)
 
 if __name__ == '__main__':
     app.run(debug=True)
