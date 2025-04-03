@@ -38,7 +38,76 @@
         <a href="./carte_interactive.html"><button>Vers la map</button></a>
       </div>
     </section>
-
+    <section>
+      <h2>Suspicious IPs (Malicious)</h2>
+      <div id="suspicious-table-container">
+        <table id="suspicious-table" class="table">
+          <thead>
+            <tr>
+              <th>IP</th>
+              <th>État</th>
+              <th>Score de Menace</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Données insérées ici -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section>
+      <h2>Malware Installé</h2>
+      <div id="malware-table-container">
+        <table id="malware-table" class="table">
+          <thead>
+            <tr>
+              <th>IP</th>
+              <th>Malware</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Données insérées ici -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <div>
+      <h2>Connexions IP Publiques</h2>
+      <div id="tableaux">
+        <table id="public-tentatives-table" class="table">
+          <thead>
+            <tr>
+              <th>IP Source</th>
+              <th>IP Destination</th>
+              <th>Nombre de Tentatives</th>
+              <th>Ports</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Donné inserer ici -->
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h2>Connexions IP Privée</h2>
+        <div id="tableaux">
+          <table id="tentatives-table" class="table">
+            <thead>
+              <tr>
+                <th>IP Source</th>
+                <th>IP Destination</th>
+                <th>Nombre de Tentatives</th>
+                <th>Protocoles</th>
+                <th>Ports</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Donné inserer ici -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
     <script src="./script.js"></script>
   </body>
 </html>

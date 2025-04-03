@@ -10,6 +10,8 @@ from countryCode import get_country_info, format_json
 from check_ip import threat_score
 from map_api import map_generator
 from ip_connections import public_access
+from ip_public_analyze import  get_ip_analysis
+from appli_request import analyze_malware, parse_tshark_output
 
 app = Flask(__name__)
 CORS(app)
@@ -66,6 +68,23 @@ def map2_service():
     file_path: str = download_file()
     map_generator(file_path)
     return jsonify({"message": "test"})
+
+@app.route('/suspicious', methods=['GET'])
+def suspicious_service():
+    data = get_ip_analysis()
+    return jsonify(data)
+
+@app.route('/malware', methods=['GET'])
+def malware_service():
+    file_path: str = download_file()
+    data = analyze_malware(file_path)
+    return jsonify(data)
+
+@app.route('/malware/list', methods=['GET'])
+def malware_list_service():
+    file_path: str = download_file()
+    data = parse_tshark_output(file_path)
+    return jsonify(data)
 
 if __name__ == '__main__':
     app.run(debug=True)
