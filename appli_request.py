@@ -4,6 +4,7 @@ from return_file import download_file
 import requests
 
 
+
 def parse_tshark_output(pcap_file):
     # Commande tshark
     command = [
@@ -24,10 +25,9 @@ def parse_tshark_output(pcap_file):
                 data.append(entry)
         
         return data
-    
+
     except subprocess.CalledProcessError as e:
         return json.dumps({"error": "Erreur lors de l'exécution de tshark", "details": str(e)})
-
 
 def analyze_malware(pcap_file):
     data = parse_tshark_output(pcap_file)
@@ -42,3 +42,4 @@ def analyze_malware(pcap_file):
         if results != []:
             malware_analyze[str_ip] = {"malware" : result["file_requested"]}
     return malware_analyze
+
