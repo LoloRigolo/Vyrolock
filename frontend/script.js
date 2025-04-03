@@ -1,3 +1,8 @@
+let attackObject = [
+  {"brutforce":0},
+  {"analysePort":0}
+];
+
 let globalIp = ""; // variable globale qui stocke l'IP
 fetch("http://127.0.0.1:5000/malware")
   .then((response) => response.json())
@@ -48,7 +53,6 @@ fetch("http://127.0.0.1:5000/suspicious")
 fetch("http://127.0.0.1:5000/init_access")
   .then((response) => response.json())
   .then((data) => {
-    console.log(data);
 
     if (data.initial_access && data.initial_access.ip) {
       globalIp = data.initial_access.ip;
@@ -75,7 +79,6 @@ fetch("http://127.0.0.1:5000/init_access")
   })
   .then((response) => response.json())
   .then((data) => {
-    console.log("Données reçues de /private_access :", data);
 
     // Forcer 'tentatives_dacces_entre_ips_privees' à être un tableau
     const tentativesDacces = Array.isArray(
@@ -87,6 +90,15 @@ fetch("http://127.0.0.1:5000/init_access")
 
     // Itérer sur le tableau de tentatives d'accès
     tentativesDacces.forEach((entry) => {
+      console.log(entry.nb_tentatives);
+      console.log(attackObject[0].brutforce);
+      if(entry.ports.length >= 40 ){
+        attackObject[1].analysePort = 1;
+      }
+      if(entry.nb_tentatives >= 100){
+        attackObject[0].brutforce = 1;
+      }
+      console.log(attackObject[0].brutforce)
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${entry.src_ip}</td>
@@ -103,7 +115,6 @@ fetch("http://127.0.0.1:5000/init_access")
   })
   .then((response) => response.json())
   .then((data) => {
-    console.log("Données reçues de /public_access :", data);
 
     // Accéder aux données des tentatives d'accès publiques
     const publicTentatives = Object.entries(data).map(([ip, entry]) => ({
@@ -112,7 +123,6 @@ fetch("http://127.0.0.1:5000/init_access")
       ports: entry.ports.join(", "), // Si plusieurs ports, les concaténer en une seule chaîne
     }));
 
-    console.log("Tentatives d'accès publiques traitées :", publicTentatives);
 
     const publicTableBody = document.querySelector(
       "#public-tentatives-table"
@@ -128,8 +138,21 @@ fetch("http://127.0.0.1:5000/init_access")
         <td>${entry.ports}</td>
       `;
       publicTableBody.appendChild(row);
-      console.log("Tentatives d'accès publiques :", entry);
     });
+    const attackTableBody = document.querySelector("#attack-table");
+    attackObject.forEach((entry) => {
+      console.log(entry)
+      if (entry.analysePort == 1){
+        row = document.createElement("tr");
+        row.innerHTML = `<td>Analyse de ports</td>`;
+        attackTableBody.appendChild(row)
+      }
+      else if (entry.brutforce == 1){
+        row = document.createElement("tr");
+        row.innerHTML = `<td>Bruteforce</td>`;
+        attackTableBody.appendChild(row)
+      }
+});
   })
   .catch((error) =>
     console.error("Erreur lors de la récupération des données:", error)
