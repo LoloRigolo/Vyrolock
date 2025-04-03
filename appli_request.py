@@ -1,6 +1,8 @@
 import subprocess
 import json
 from return_file import download_file
+import requests
+
 
 
 def parse_tshark_output(pcap_file):
@@ -22,13 +24,22 @@ def parse_tshark_output(pcap_file):
                 entry = {"ip_src": parts[0], "ip_dst": parts[1], "file_requested": parts[2]}
                 data.append(entry)
         
-        # Convertir en JSON
-        return json.dumps(data, indent=4)
-    
+        return data
+
     except subprocess.CalledProcessError as e:
         return json.dumps({"error": "Erreur lors de l'exécution de tshark", "details": str(e)})
 
-# Exemple d'utilisation
-pcap_file = download_file()  # Remplace par le bon chemin si nécessaire
-json_output = parse_tshark_output(pcap_file)
-print(json_output)
+def analyze_malware(pcap_file):
+    data = parse_tshark_output(pcap_file)
+    malware_analyze = {}
+    for result in data:
+        ip_dst = result["ip_dst"]
+        analysis_api = f"http://127.0.0.1:5000/threat_score/{ip_dst}"
+        response = requests.get(analysis_api)
+        response.raise_for_status()
+        results = response.json()
+        str_ip = str(ip_dst)
+        if results != []:
+            malware_analyze[str_ip] = {"malware" : result["file_requested"]}
+    return malware_analyze
+
