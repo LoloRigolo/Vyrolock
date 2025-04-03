@@ -6,7 +6,10 @@ from ip_private_connections import analyze_pcap_and_ip
 import json
 from loguru import logger
 from certificate_detection import pcap_to_json
-from countryCode import get_country_info
+from countryCode import get_country_info, format_json
+from check_ip import threat_score
+from map_api import map_generator
+from ip_connections import public_access
 
 app = Flask(__name__)
 CORS(app)
@@ -22,6 +25,7 @@ def initial_access():
     pcap_info: str = extract_pcap_info(file_path)
     pcap_info = json.loads(pcap_info)
     for data in pcap_info:
+        print(data)
         flag = envoyer_donnees_pcap(data)
         if flag != "Flag non trouvé":
             return jsonify({"message": flag, "initial_access" :data})
@@ -34,16 +38,34 @@ def get_info(ip_address):
     data = analyze_pcap_and_ip(file_path, ip_address)
     return jsonify(data)
 
+@app.route('/public_access/<ip_address>', methods=['GET'])
+def get_public_info(ip_address):
+    file_path: str = download_file()
+    data = public_access(file_path, ip_address)
+    return jsonify(data)
+
 @app.route('/map', methods=['GET'])
 def map_service():
     file_path: str = download_file()
     response = pcap_to_json(file_path)
+    response = format_json(response)
     return jsonify(response)
 
 @app.route('/codeiso/<alpha2>', methods=['GET'])
 def iso_service(alpha2):
     response = get_country_info(alpha2)
     return jsonify(response)
+
+@app.route('/threat_score/<ip>', methods=['GET'])
+def check_threat_score(ip):
+    response = threat_score(ip)
+    return jsonify(response)
+
+@app.route('/map2', methods=['GET'])
+def map2_service():
+    file_path: str = download_file()
+    map_generator(file_path)
+    return jsonify({"message": "test"})
 
 if __name__ == '__main__':
     app.run(debug=True)
