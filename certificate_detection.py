@@ -14,20 +14,26 @@ def pcap_to_json(pcap_file):
         # Traitement des résultats pour associer les IPs aux informations des certificats
         lines = result.stdout.strip().split("\n")
         certificate_info = {}
-
         for line in lines:
             fields = line.split("\t")
             if len(fields) >= 2:
                 ip_src = fields[0]  # IP source
                 country = fields[1]  # Pays
-
+                
                 # Réduire la clé (pays) à une seule occurrence
                 country = ','.join(sorted(set(country.split(','))))  # Réduire les répétitions de pays
 
+                if len(country) > 2:
                 # Utiliser un set pour éviter les doublons d'IP pour un même pays
-                if country not in certificate_info:
-                    certificate_info[country] = set()  # Créer un set pour chaque pays
-                certificate_info[country].add(ip_src)  # Ajouter l'IP au set
+                    countries = country.split(',')
+                    for country in countries:
+                        if country not in certificate_info:
+                            certificate_info[country] = set()  # Créer un set pour chaque pays
+                        certificate_info[country].add(ip_src)
+                else:
+                    if country not in certificate_info:
+                        certificate_info[country] = set()  # Créer un set pour chaque pays
+                    certificate_info[country].add(ip_src)  # Ajouter l'IP au set
 
         # Reformatage : chaque pays avec ses IPs uniques
         formatted_info = {}

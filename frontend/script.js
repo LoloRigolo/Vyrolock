@@ -115,7 +115,7 @@ fetch("http://127.0.0.1:5000/init_access")
     console.log("Tentatives d'accès publiques traitées :", publicTentatives);
 
     const publicTableBody = document.querySelector(
-      "#public-tentatives-table tbody"
+      "#public-tentatives-table"
     );
 
     // Itérer sur les tentatives d'accès publiques
@@ -155,3 +155,36 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+var map = L.map('map').setView([0, 0], 2);
+const certTableBody = document.querySelector(
+      "#cert-table"
+    )
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+    fetch("http://127.0.0.1:5000/map")
+      .then((response) => response.json())
+      .then((data) => {
+        autoCert = false
+        data.data.forEach((entry) => {
+          
+          if (entry.country != "inconnu"){
+            L.marker([entry.latitude, entry.longitude]).addTo(map)
+              .bindPopup(entry.country)
+              .openPopup();
+          }
+          else {
+            autoCert = true
+            entry.ip.forEach((ip) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td>${ip}</td>`;
+            certTableBody.appendChild(row);});
+          }
+        });
+        if (autoCert == false){
+            row = document.createElement("tr");
+            row.innerHTML = `<td>Aucun certificat auto-signé</td>`;
+            certTableBody.appendChild(row)
+          }
+        ;})
+
