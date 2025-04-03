@@ -36,6 +36,7 @@ section {
   flex: 1; /* Permet aux éléments d'occuper l'espace disponible */
   min-width: 250px;
 }
+
 .map {
   background: white;
   padding: 20px;
@@ -47,11 +48,11 @@ section {
   flex: 1; /* Permet aux éléments d'occuper l'espace disponible */
   min-width: 250px;
 }
+
 /* Style des titres */
 h2 {
   margin-bottom: 20px;
   font-family: Arial, sans-serif;
-
   font-size: 1.5rem;
 }
 
@@ -65,10 +66,10 @@ h2 {
 #tableaux {
   margin-top: 30px;
   padding: 10px;
-  overflow-x: auto; 
+  overflow-x: auto;
   background-color: #fff;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   font-family: Arial, sans-serif;
 }
 
@@ -87,7 +88,9 @@ th, td {
   text-align: left;
   border-bottom: 1px solid #ddd;
   word-wrap: break-word;
-  white-space: normal;
+  white-space: nowrap; /* Ajouté pour empêcher les retours à la ligne par défaut */
+  overflow: hidden; /* Cache l'excédent de texte */
+  text-overflow: ellipsis; /* Affiche des points de suspension si le texte est trop long */
 }
 
 th {
@@ -103,19 +106,43 @@ tr:hover {
   background-color: #f1f1f1;
 }
 
-td:last-child {
-  font-size: 0.9em;
-  max-width: 200px; /* Ajuste selon tes besoins */
-  word-break: break-word;
+/* Style des cellules extensibles */
+td.expandable {
+  max-width: 200px; /* Limite la largeur de la cellule avant d'afficher plus */
+  white-space: nowrap; /* Empêche le texte de revenir à la ligne */
+  overflow: hidden; /* Cache le texte excédentaire */
+  text-overflow: ellipsis; /* Ajoute des points de suspension pour signifier du texte caché */
+  position: relative;
 }
 
+td.expandable.expanded {
+  white-space: normal; /* Permet à la cellule de s'étendre pour afficher tout le texte */
+  word-wrap: break-word; /* Permet de couper les mots si nécessaire */
+}
+
+/* Bouton "Afficher plus" */
+button.expand-btn {
+  display: none;
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  font-size: 12px;
+  padding: 5px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+td.expandable:hover button.expand-btn {
+  display: block; /* Affiche le bouton lorsqu'on survole la cellule */
+}
 
 /* Responsive design pour les petits écrans */
 @media (max-width: 768px) {
   .table th, .table td {
     padding: 10px;
-    font-size: 0.9em; 
+    font-size: 0.9em;
   }
 }
-
-
